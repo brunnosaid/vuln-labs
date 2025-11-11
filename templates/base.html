@@ -1,40 +1,80 @@
 <!doctype html>
-<html lang="pt-br">
+<html lang="pt-br" data-theme="light">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Vuln Lab Flask</title>
+
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-  <header>
-    <h1>Vuln Lab Flask — ambiente de treino</h1>
-    <nav>
-      <a href="{{ url_for('index') }}">Home</a> |
-      <a href="{{ url_for('xss') }}">XSS</a> |
-      <a href="{{ url_for('headers') }}">Headers / Cookies</a> |
-      <a href="{{ url_for('sqli') }}">SQL Injection</a> |
-      <a href="{{ url_for('shell') }}">Reverse Shell Detector</a> |
-      <a href="{{ url_for('binary') }}">Binary Analyzer</a> |
-      <a href="{{ url_for('network') }}">Network IOC</a>
-    </nav>
-    <hr/>
-  </header>
+  <div class="container">
+    <header class="header">
+      <div class="brand">
+        <div class="logo">VL</div>
+        <div>
+          <div class="title">Vuln Lab Flask</div>
+          <div class="subtitle">Ambiente local para treino e análise</div>
+        </div>
+      </div>
 
-  <main>
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul class="flashes">{% for m in messages %}<li>{{ m }}</li>{% endfor %}</ul>
-      {% endif %}
-    {% endwith %}
-    {% block content %}{% endblock %}
-  </main>
+      <div class="controls">
+        <nav class="nav" aria-label="main nav">
+          <a href="{{ url_for('index') }}" class="{% if request.endpoint=='index' %}active{% endif %}">Home</a>
+          <a href="{{ url_for('xss') }}" class="{% if request.endpoint=='xss' or request.endpoint=='xss_reflect' %}active{% endif %}">XSS</a>
+          <a href="{{ url_for('headers') }}" class="{% if request.endpoint=='headers' %}active{% endif %}">Headers</a>
+          <a href="{{ url_for('sqli') }}" class="{% if request.endpoint=='sqli' %}active{% endif %}">SQLi</a>
+          <a href="{{ url_for('shell') }}" class="{% if request.endpoint=='shell' %}active{% endif %}">Shell-detector</a>
+          <a href="{{ url_for('binary') }}" class="{% if request.endpoint=='binary' %}active{% endif %}">Binary</a>
+          <a href="{{ url_for('network') }}" class="{% if request.endpoint=='network' %}active{% endif %}">Network</a>
+        </nav>
 
-  <footer>
-    <hr/>
-    <small>Ambiente de treino — não usar contra terceiros. Rode localmente/isolado.</small>
-  </footer>
+        <div style="display:flex;gap:10px;align-items:center;margin-left:8px">
+          <div title="Alternar tema" id="themeToggle" class="toggle" role="button" aria-pressed="false">
+            <div class="dot"></div>
+          </div>
+        </div>
+      </div>
+    </header>
 
-  <script src="{{ url_for('static', filename='js/dom_xss.js') }}"></script>
+    <main class="layout">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="card">
+            {% for m in messages %}<div style="color:var(--accent)">{{ m }}</div>{% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+      <small>Ambiente de treino - rode localmente e não exponha à internet</small>
+    </footer>
+  </div>
+
+  <script>
+    // theme toggle; persists on localStorage
+    const root = document.documentElement;
+    const toggle = document.getElementById('themeToggle');
+    function setTheme(t){
+      root.setAttribute('data-theme', t);
+      localStorage.setItem('vl_theme', t);
+      if(toggle) toggle.setAttribute('aria-pressed', t==='dark');
+    }
+    // init
+    const saved = localStorage.getItem('vl_theme') || 'light';
+    setTheme(saved);
+    if(toggle){
+      toggle.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+        setTheme(current === 'dark' ? 'light' : 'dark');
+      });
+    }
+  </script>
 </body>
 </html>
