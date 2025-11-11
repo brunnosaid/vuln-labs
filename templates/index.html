@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Bem-vinda(o) — selecione um laboratório</h2>
+<p>Este laboratório contém seções para treinar e comparar vulnerabilidades e proteções.</p>
+
+<ul>
+  <li><a href="{{ url_for('xss') }}">XSS playground (refletido, armazenado, DOM)</a></li>
+  <li><a href="{{ url_for('headers') }}">Headers / Cookies — Burp Playground</a></li>
+  <li><a href="{{ url_for('sqli') }}">SQL Injection — modo vulnerável / seguro</a></li>
+  <li><a href="{{ url_for('shell') }}">Reverse shell detector (análise de texto)</a></li>
+  <li><a href="{{ url_for('binary') }}">Binary analyzer (upload - leitura estática)</a></li>
+  <li><a href="{{ url_for('network') }}">Network IOC checker</a></li>
+</ul>
+{% endblock %}

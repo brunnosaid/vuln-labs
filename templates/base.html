@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Vuln Lab Flask</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Vuln Lab Flask — ambiente de treino</h1>
+    <nav>
+      <a href="{{ url_for('index') }}">Home</a> |
+      <a href="{{ url_for('xss') }}">XSS</a> |
+      <a href="{{ url_for('headers') }}">Headers / Cookies</a> |
+      <a href="{{ url_for('sqli') }}">SQL Injection</a> |
+      <a href="{{ url_for('shell') }}">Reverse Shell Detector</a> |
+      <a href="{{ url_for('binary') }}">Binary Analyzer</a> |
+      <a href="{{ url_for('network') }}">Network IOC</a>
+    </nav>
+    <hr/>
+  </header>
+
+  <main>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flashes">{% for m in messages %}<li>{{ m }}</li>{% endfor %}</ul>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer>
+    <hr/>
+    <small>Ambiente de treino — não usar contra terceiros. Rode localmente/isolado.</small>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/dom_xss.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>XSS Playground</h2>
+
+<section>
+  <h3>Reflected XSS (GET)</h3>
+  <form action="{{ url_for('xss_reflect') }}" method="get">
+    <label>q: <input name="q" value="{{ request.args.get('q','') }}"></label>
+    <button>Reflect</button>
+  </form>
+  {% if reflect %}
+    <div class="card">
+      <h4>Reflected output (intentionally unescaped for testing)</h4>
+      <!-- note: this is intentionally not escaped to show vulnerability in lab -->
+      <div class="vulnerable">{{ reflect | safe }}</div>
+    </div>
+  {% endif %}
+</section>
+
+<section>
+  <h3>Stored XSS</h3>
+  <form method="post" action="{{ url_for('xss') }}">
+    <label>Nome: <input name="name"></label><br/>
+    <label>Mensagem: <textarea name="message"></textarea></label><br/>
+    <button type="submit">Salvar (stored)</button>
+  </form>
+
+  <h4>Mensagens armazenadas (mostradas sem escape para aprendizado)</h4>
+  <ul>
+    {% for m in messages %}
+      <li><strong>{{ m['name'] }}</strong>: <span class="vulnerable">{{ m['message'] | safe }}</span></li>
+    {% else %}
+      <li>Nenhuma mensagem ainda.</li>
+    {% endfor %}
+  </ul>
+</section>
+
+<section>
+  <h3>DOM-based XSS (demo)</h3>
+  <p>Abra o console do navegador e brinque com o campo abaixo — o JS do lado cliente pode demonstrar DOM XSS.</p>
+  <input id="domInput" placeholder="Digite algo"/>
+  <button id="domBtn">Inserir no DOM</button>
+  <div id="domOutput"></div>
+</section>
+
+{% endblock %}

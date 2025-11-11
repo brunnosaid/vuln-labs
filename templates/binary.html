@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Binary Analyzer (upload seguro, análise estática)</h2>
+
+<form method="post" enctype="multipart/form-data">
+  <label>Escolha arquivo (máx 10MB): <input type="file" name="file" /></label><br/>
+  <button>Enviar e analisar</button>
+</form>
+
+{% if report %}
+<section>
+  <h3>Relatório (análise estática)</h3>
+  <ul>
+    <li>Filename: {{ report.filename }}</li>
+    <li>Size: {{ report.size }} bytes</li>
+    <li>SHA256: <code>{{ report.sha256 }}</code></li>
+    <li>Entropy: {{ "%.3f"|format(report.entropy) }} bits/byte</li>
+  </ul>
+
+  <h4>Strings suspeitas (amostra)</h4>
+  <pre>{{ report.suspicious_strings | join("\n") }}</pre>
+
+  <h4>Strings (amostra)</h4>
+  <pre>{{ report.strings_sample | join("\n") }}</pre>
+
+  <p>Download do arquivo submetido: <a href="{{ url_for('uploaded_file', filename=report.filename) }}">{{ report.filename }}</a></p>
+</section>
+{% endif %}
+{% endblock %}

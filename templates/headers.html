@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Headers & Cookies (Burp playground)</h2>
+
+<section class="card">
+  <h3>O que o servidor recebeu</h3>
+  <h4>Headers</h4>
+  <pre>{{ headers | tojson(indent=2) }}</pre>
+
+  <h4>Cookies</h4>
+  <pre>{{ cookies | tojson(indent=2) }}</pre>
+
+  <h4>Body (raw)</h4>
+  <pre>{{ body }}</pre>
+
+  <p>Use Burp / curl para modificar headers, user-agent, cookies, etc. Este endpoint apenas ecoa o que recebeu.</p>
+</section>
+{% endblock %}

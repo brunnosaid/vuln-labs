@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Network IOC Checker</h2>
+
+<form method="post">
+  <label>Cole logs de rede, filas de DNS ou tráfego HTTP (ex.: logs de proxy, JSON, etc):</label><br/>
+  <textarea name="netlog" rows="8" style="width:100%;">{{ findings.raw if findings else "" }}</textarea><br/>
+  <button>Verificar IOCs</button>
+</form>
+
+{% if findings %}
+<section>
+  <h3>Resultados</h3>
+  <p>IPs detectados: {{ findings.found_ips | join(", ") }}</p>
+  <p>Domínios detectados: {{ findings.found_domains | join(", ") }}</p>
+</section>
+{% endif %}
+
+<section>
+  <h4>IOC List (amostra)</h4>
+  <pre>{{ ioc | tojson(indent=2) }}</pre>
+</section>
+{% endblock %}

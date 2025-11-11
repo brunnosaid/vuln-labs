@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Reverse Shell Detector (análise de texto)</h2>
+
+<form method="post" action="{{ url_for('shell') }}">
+  <label>Cole aqui o payload / comando / log suspeito:</label><br/>
+  <textarea name="payload" rows="8" style="width:100%;">{{ text }}</textarea><br/>
+  <button>Analisar</button>
+</form>
+
+{% if analysis %}
+<section>
+  <h3>Resultados</h3>
+  <p>Matches encontrados: <strong>{{ analysis.matches }}</strong></p>
+  <p>Outras heurísticas: <strong>{{ analysis.extra }}</strong></p>
+  <p>Interprete estes outputs para decidir investigação.</p>
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>SQL Injection Lab</h2>
+
+<form method="get" action="{{ url_for('sqli') }}">
+  <label>Mode:
+    <select name="mode" onchange="this.form.submit()">
+      <option value="vulnerable" {% if mode=='vulnerable' %}selected{% endif %}>Vulnerable</option>
+      <option value="safe" {% if mode=='safe' %}selected{% endif %}>Safe (prepared)</option>
+    </select>
+  </label>
+</form>
+
+<section>
+  <h3>Login test (mode: {{ mode }})</h3>
+  <form method="post" action="{{ url_for('sqli', mode=mode) }}">
+    <label>Username: <input name="username" value=""></label><br/>
+    <label>Password: <input name="password" value=""></label><br/>
+    <button>Submit</button>
+  </form>
+</section>
+
+{% if query %}
+<section>
+  <h4>Query Executed (for learning)</h4>
+  <pre>{{ query }}</pre>
+  <h4>Result</h4>
+  <pre>{{ result | tojson(indent=2) }}</pre>
+  <p><strong>Nota:</strong> compare o comportamento entre "vulnerable" e "safe".</p>
+</section>
+{% endif %}
+{% endblock %}
